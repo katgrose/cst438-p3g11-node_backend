@@ -3,6 +3,7 @@ const http = require("http");
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore, collection, getDocs } = require('firebase/firestore');
 */
+
 const hostname = '127.0.0.1';
 const port = 3000;
 
@@ -15,13 +16,22 @@ const app = initializeApp();
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("C:/Users/Kat/Desktop/Node/myplants-438p3g11-firebase-adminsdk-sgpue-27cf720786.json");
+var serviceAccount = require("./serviceAccountKeys.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://myplants-438p3g11-default-rtdb.firebaseio.com/',
     projectId: 'myplants-438p3g11'
 });
+
+const db = admin.firestore();
+let userRef = db.collection("User");
+
+userRef.get().then((querySnapshot) => {
+    querySnapshot.forEach(document => {
+        console.log(document.data())
+    })
+})
 
 // add new user
 
