@@ -27,6 +27,7 @@ admin.initializeApp({
 const db = admin.firestore();
 let userRef = db.collection("User");
 
+//
 userRef.get().then((querySnapshot) => {
     querySnapshot.forEach(document => {
         console.log(document.data())
