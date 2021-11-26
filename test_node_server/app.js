@@ -1,18 +1,6 @@
 const http = require("http");
-/*
-const { initializeApp } = require('firebase-admin/app');
-const { getFirestore, collection, getDocs } = require('firebase/firestore');
-*/
-
 const hostname = '127.0.0.1';
 const port = 3000;
-
-/*
-const db = getFirestore();
-const ref = db.ref();
-const usersRef = ref.child('Users');
-const app = initializeApp();
-*/
 
 var admin = require("firebase-admin");
 
@@ -38,16 +26,6 @@ userRef.get().then((querySnapshot) => {
 // send user
 
 // test user
-
-
-
-/*
-usersRef.set({
-    testuser2: {
-        password: testpass2
-    }
-});
-*/
 
 // login
 
