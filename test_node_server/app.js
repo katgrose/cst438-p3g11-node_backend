@@ -69,6 +69,7 @@ const server = http.createServer((req, res) => {
     res.setHeader('Content-Type', 'text/plain');
     if(req.url == '/getUsers') {
         userRef.doc('testuser1').get().then((querySnapshot) => {
+            // important to have statusCode and .end() within each route as it's an async task
             res.statusCode = 200;
             res.write(querySnapshot.data().username + " ");
             res.write(querySnapshot.data().password)
