@@ -1,22 +1,9 @@
 const http = require("http");
-/*
-const { initializeApp } = require('firebase-admin/app');
-const { getFirestore, collection, getDocs } = require('firebase/firestore');
-*/
+var admin = require("firebase-admin");
+var serviceAccount = require("./serviceAccountKeys.json");
 
 const hostname = '127.0.0.1';
 const port = 3000;
-
-/*
-const db = getFirestore();
-const ref = db.ref();
-const usersRef = ref.child('Users');
-const app = initializeApp();
-*/
-
-var admin = require("firebase-admin");
-
-var serviceAccount = require("./serviceAccountKeys.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -24,9 +11,39 @@ admin.initializeApp({
     projectId: 'myplants-438p3g11'
 });
 
+// database collection paths
 const db = admin.firestore();
 let userRef = db.collection("User");
+let publicPlantRef = db.collection("public_plants")
+let userPlantRef = db.collection("user_plants")
 
+// test get users
+// userRef.get().then((querySnapshot) => {
+//     querySnapshot.forEach(document => {
+//         console.log(document.data())
+//     })
+// })
+//
+// // test get public plants
+// publicPlantRef.get().then((querySnapshot) => {
+//     querySnapshot.forEach(document => {
+//         console.log(document.data())
+//     })
+// })
+//
+// // test get user plants
+// userPlantRef.get().then((querySnapshot) => {
+//     querySnapshot.forEach(document => {
+//         console.log(document.data())
+//     })
+// })
+//
+// getting a specific file from the db (.doc() is the key element here)
+// userRef.doc('testuser1').get().then((querySnapshot) => {
+//         console.log(querySnapshot.data())
+// })
+
+<<<<<<< HEAD
 //
 userRef.get().then((querySnapshot) => {
     querySnapshot.forEach(document => {
@@ -41,37 +58,42 @@ userRef.get().then((querySnapshot) => {
 // test user
 
 
-
-/*
-usersRef.set({
-    testuser2: {
-        password: testpass2
-    }
-});
-*/
-
-// login
-
-// logout
-
-// delete user
-
-// add plant to private list
-
-// add plant to public list
-
-// delete plant from private list
-
-// delete plant from public list
-
-
+=======
 //Create HTTP server and listen on port 3000 for requests
 const server = http.createServer((req, res) => {
+>>>>>>> master
 
-    //Set the response HTTP header with HTTP status and Content type
-    res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
-    res.end('Connected to myPlants Node Server\n');
+    if(req.url == '/getUsers') {
+        // replace 'testuser1' with data from the request body
+        userRef.doc('testuser1').get().then((querySnapshot) => {
+            // important to have statusCode and .end() within each route as it's an async task
+            res.statusCode = 200;
+            res.write(querySnapshot.data().username);
+            res.write(querySnapshot.data().password)
+            res.end();
+        })
+    };
+
+    // add new user
+
+    // send user
+
+    // test user
+
+    // login
+
+    // logout
+
+    // delete user
+
+    // add plant to private list
+
+    // add plant to public list
+
+    // delete plant from private list
+
+    // delete plant from public list
 });
 
 //listen for request on port 3000, and as a callback function have the port listened on logged
