@@ -2,6 +2,12 @@ const http = require("http");
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKeys.json");
 
+const express=require('express');
+const cors=require('cors');
+const app = express();
+app.use(express.json());
+app.use(cors());
+
 const hostname = '127.0.0.1';
 const port = 3000;
 
@@ -43,25 +49,23 @@ let userPlantRef = db.collection("user_plants")
 //         console.log(querySnapshot.data())
 // })
 
-<<<<<<< HEAD
-//
-userRef.get().then((querySnapshot) => {
-    querySnapshot.forEach(document => {
-        console.log(document.data())
-    })
-})
 
 // add new user
+app.post("/create", async (req, res) => {
+    const data = req.body;
+    console.log("data of User", data);
+    await userRef.add(data);
+    res.send({msg: "User Added"});
+})
 
 // send user
 
 // test user
 
 
-=======
+
 //Create HTTP server and listen on port 3000 for requests
 const server = http.createServer((req, res) => {
->>>>>>> master
 
     res.setHeader('Content-Type', 'text/plain');
     if(req.url == '/getUsers') {
