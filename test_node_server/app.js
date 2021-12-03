@@ -1,4 +1,5 @@
 const http = require("http");
+const url = require("url");
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKeys.json");
 
@@ -45,11 +46,13 @@ let userPlantRef = db.collection("user_plants")
 
 //Create HTTP server and listen on port 3000 for requests
 const server = http.createServer((req, res) => {
+    const queryObject = url.parse(req.url,true).query;
+    let apiCall = req.url.split("?");
 
     res.setHeader('Content-Type', 'text/plain');
-    if(req.url == '/getUsers') {
+    if(apiCall[0] == '/login') {
         // replace 'testuser1' with data from the request body
-        userRef.doc('testuser1').get().then((querySnapshot) => {
+        userRef.doc(queryObject.username.toString()).get().then((querySnapshot) => {
             // important to have statusCode and .end() within each route as it's an async task
             res.statusCode = 200;
             res.write(querySnapshot.data().username);
