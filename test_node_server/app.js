@@ -51,12 +51,7 @@ let userPlantRef = db.collection("user_plants")
 
 
 // add new user
-app.post("/create", async (req, res) => {
-    const data = req.body;
-    console.log("data of User", data);
-    await userRef.add(data);
-    res.send({msg: "User Added"});
-})
+
 
 // send user
 
