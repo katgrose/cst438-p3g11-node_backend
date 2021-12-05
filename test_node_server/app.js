@@ -3,12 +3,6 @@ const url = require("url");
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKeys.json");
 
-const express=require('express');
-const cors=require('cors');
-const app = express();
-app.use(express.json());
-app.use(cors());
-
 const hostname = '127.0.0.1';
 const port = 3000;
 
@@ -24,83 +18,105 @@ let userRef = db.collection("User");
 let publicPlantRef = db.collection("public_plants")
 let userPlantRef = db.collection("user_plants")
 
-// test get users
-// userRef.get().then((querySnapshot) => {
-//     querySnapshot.forEach(document => {
-//         console.log(document.data())
-//     })
-// })
-//
-// // test get public plants
-// publicPlantRef.get().then((querySnapshot) => {
-//     querySnapshot.forEach(document => {
-//         console.log(document.data())
-//     })
-// })
-//
-// // test get user plants
-// userPlantRef.get().then((querySnapshot) => {
-//     querySnapshot.forEach(document => {
-//         console.log(document.data())
-//     })
-// })
-//
-// getting a specific file from the db (.doc() is the key element here)
-// userRef.doc('testuser1').get().then((querySnapshot) => {
-//         console.log(querySnapshot.data())
-// })
-
-
-// add new user
-app.post("/create", async (req, res) => {
-    const data = req.body;
-    console.log("data of User", data);
-    await userRef.add(data);
-    res.send({msg: "User Added"});
-})
-
-// send user
-
-// test user
-
-
-
 //Create HTTP server and listen on port 3000 for requests
 const server = http.createServer((req, res) => {
     const queryObject = url.parse(req.url,true).query;
     let apiCall = req.url.split("?");
 
     res.setHeader('Content-Type', 'text/plain');
-    if(apiCall[0] == '/login') {
-        // replace 'testuser1' with data from the request body
+    if(apiCall[0] === '/') {
+        res.end("myPlants server running!");
+    }
+
+    // login
+    if(apiCall[0] === '/login') {
         userRef.doc(queryObject.username.toString()).get().then((querySnapshot) => {
-            // important to have statusCode and .end() within each route as it's an async task
             res.statusCode = 200;
-            res.write(querySnapshot.data().username);
+            res.write(querySnapshot.data().username + " ");
             res.write(querySnapshot.data().password)
             res.end();
         })
-    };
+    }
 
-    // add new user
+    // get private plants
+    if(apiCall[0] === '/getMyPlants') {
+        userPlantRef.get().then((querySnapshot) => {
+            querySnapshot.forEach(document => {
+                res.statusCode = 200;
+                res.write(document.data().plantName + ";" +
+                                document.data().username + ";" +
+                                document.data().description + ";" +
+                                document.data().notes + ";" +
+                                document.data().waterCycle + ";" +
+                                document.data().fertilizeCycle + "||");
+            })
+            res.end();
+        })
+    }
 
-    // send user
-
-    // test user
-
-    // login
-
-    // logout
-
-    // delete user
-
-    // add plant to private list
-
-    // add plant to public list
+    // add or update plant in private list
+    if(apiCall[0] === '/addMyPlants') {
+        userPlantRef.doc(queryObject.plantName.toString()).set({
+            description:queryObject.description,
+            plantName:queryObject.plantName,
+            username:queryObject.username,
+            notes:queryObject.notes,
+            fertilizeCycle:queryObject.fertilizeCycle,
+            waterCycle:queryObject.waterCycle
+        }).then(()=> {
+            res.write("Private plant added!");
+        }).catch((error)=> {
+            res.write("Error adding plant.");
+        })
+        res.end();
+    }
 
     // delete plant from private list
+    if(apiCall[0] === '/deleteMyPlants') {
+        userPlantRef.doc(queryObject.plantName.toString()).delete().then(()=> {
+            res.write("Plant successfully deleted.");
+        }).catch((error) => {
+            res.write("Problem deleting plant.");
+        });
+    }
+
+    // get public plants
+    if(apiCall[0] === '/getPlants') {
+        publicPlantRef.get().then((querySnapshot) => {
+            querySnapshot.forEach(document => {
+                res.statusCode = 200;
+                res.write(document.data().plantName + ";" +
+                                document.data().plantID + ';' +
+                                document.data().username + ";" +
+                                document.data().description + '||');
+            })
+            res.end();
+        })
+    }
+
+    // add or update plant in public list
+    if(apiCall[0] === '/addPlants') {
+        publicPlantRef.doc(queryObject.plantName.toString()).set({
+            description:queryObject.description,
+            plantID:queryObject.plantID,
+            plantName:queryObject.plantName,
+            username:queryObject.username
+        }).then(()=> {
+            res.write("Plant added!");
+        }).catch((error)=> {
+            res.write("Error adding plant.");
+        })
+        res.end();
+    }
 
     // delete plant from public list
+    if(apiCall[0] === '/deletePlants') {
+        publicPlantRef.doc(queryObject.plantName.toString()).delete().then(()=> {
+            res.write("Plant successfully deleted.");
+        }).catch((error) => {
+            res.write("Problem deleting plant.");
+        });
+    }
 });
 
 //listen for request on port 3000, and as a callback function have the port listened on logged
