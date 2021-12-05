@@ -38,6 +38,28 @@ const server = http.createServer((req, res) => {
         })
     }
 
+    //add new user
+    if(apiCall[0] === '/addNewUser') {
+        userPlantRef.doc(queryObject.username.toString()).set({
+            username:queryObject.username,
+            password:queryObject.password
+        }).then(()=> {
+            res.write("New user added");
+        }).catch((error)=> {
+            res.write("Error adding user");
+        })
+        res.end();
+    }
+
+    // delete user
+    if(apiCall[0] === '/deleteUser') {
+        userPlantRef.doc(queryObject.username.toString()).delete().then(()=> {
+            res.write("user deleted.");
+        }).catch((error) => {
+            res.write("Cannot delete user");
+        });
+    }
+
     // get private plants
     if(apiCall[0] === '/getMyPlants') {
         userPlantRef.get().then((querySnapshot) => {
