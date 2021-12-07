@@ -35,6 +35,9 @@ const server = http.createServer((req, res) => {
             res.write(querySnapshot.data().username + " ");
             res.write(querySnapshot.data().password)
             res.end();
+        }).catch((error) => {
+            res.write("");
+            res.end();
         })
     }
 
