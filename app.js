@@ -6,7 +6,7 @@ var admin = require("firebase-admin");
 //var serviceAccount = require("./serviceAccountKeys.json");
 
 const hostname = '127.0.0.1';
-const port = 3000;
+const port = 5000;
 
 admin.initializeApp({
     //credential: admin.credential.cert(serviceAccount),
