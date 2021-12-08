@@ -1,13 +1,15 @@
 const http = require("http");
 const url = require("url");
 var admin = require("firebase-admin");
-var serviceAccount = require("./serviceAccountKeys.json");
+
+//Applied env in webstorm
+//var serviceAccount = require("./serviceAccountKeys.json");
 
 const hostname = '127.0.0.1';
 const port = 3000;
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    //credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://myplants-438p3g11-default-rtdb.firebaseio.com/',
     projectId: 'myplants-438p3g11'
 });
