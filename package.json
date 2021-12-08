@@ -4,7 +4,7 @@
   "description": "test_node_server",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node /app/app.js"
   },
   "author": {
     "name": ""
