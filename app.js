@@ -75,7 +75,7 @@ const server = http.createServer((req, res) => {
                                 document.data().description + ";" +
                                 document.data().notes + ";" +
                                 document.data().waterCycle + ";" +
-                                document.data().fertilizeCycle + "||");
+                                document.data().fertilizeCycle + "/");
             })
             res.end();
         })
@@ -115,7 +115,7 @@ const server = http.createServer((req, res) => {
                 res.write(document.data().plantName + ";" +
                                 document.data().plantID + ';' +
                                 document.data().username + ";" +
-                                document.data().description + '||');
+                                document.data().description + '/');
             })
             res.end();
         })
