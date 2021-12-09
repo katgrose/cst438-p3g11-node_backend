@@ -32,6 +32,7 @@ const server = http.createServer((req, res) => {
     if(apiCall[0] === '/login') {
         userRef.doc(queryObject.username.toString()).get().then((querySnapshot) => {
             res.statusCode = 200;
+            console.log(querySnapshot.data());
             res.write(querySnapshot.data().username + " ");
             res.write(querySnapshot.data().password)
             res.end();
@@ -43,7 +44,7 @@ const server = http.createServer((req, res) => {
 
     //add new user
     if(apiCall[0] === '/addNewUser') {
-        userPlantRef.doc(queryObject.username.toString()).set({
+        userRef.doc(queryObject.username.toString()).set({
             username:queryObject.username,
             password:queryObject.password
         }).then(()=> {
