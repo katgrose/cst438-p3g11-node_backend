@@ -34,6 +34,7 @@ const server = http.createServer((req, res) => {
     if(apiCall[0] === '/login') {
         userRef.doc(queryObject.username.toString()).get().then((querySnapshot) => {
             res.statusCode = 200;
+            console.log(querySnapshot.data());
             res.write(querySnapshot.data().username + " ");
             res.write(querySnapshot.data().password)
             res.end();
@@ -45,7 +46,7 @@ const server = http.createServer((req, res) => {
 
     //add new user
     if(apiCall[0] === '/addNewUser') {
-        userPlantRef.doc(queryObject.username.toString()).set({
+        userRef.doc(queryObject.username.toString()).set({
             username:queryObject.username,
             password:queryObject.password
         }).then(()=> {
@@ -75,7 +76,7 @@ const server = http.createServer((req, res) => {
                                 document.data().description + ";" +
                                 document.data().notes + ";" +
                                 document.data().waterCycle + ";" +
-                                document.data().fertilizeCycle + "||");
+                                document.data().fertilizeCycle + "/");
             })
             res.end();
         })
@@ -115,7 +116,7 @@ const server = http.createServer((req, res) => {
                 res.write(document.data().plantName + ";" +
                                 document.data().plantID + ';' +
                                 document.data().username + ";" +
-                                document.data().description + '||');
+                                document.data().description + '/');
             })
             res.end();
         })
